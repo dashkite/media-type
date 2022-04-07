@@ -1,0 +1,42 @@
+{
+  "name": "@dashkite/media-type",
+  "version": "0.0.0",
+  "description": "Parse HTTP Media Types in JavaScript",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Dan Yoder",
+  "exports": {
+    ".": {
+      "browser": "./build/browser/src/index.js",
+      "node": "./build/node/src/index.js"
+    }
+  },
+  "main": "build/node/src/index.js",
+  "files": [
+    "build/browser/src",
+    "build/node/src"
+  ],
+  "scripts": {
+    "test": "genie test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dashkite/media-type.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/dashkite/media-type/issues"
+  },
+  "homepage": "https://github.com/dashkite/media-type#readme",
+  "devDependencies": {
+    "@dashkite/amen": "^0.1.2",
+    "@dashkite/amen-console": "^0.0.1",
+    "@dashkite/assert": "^0.1.4",
+    "@dashkite/genie": "^0.5.6",
+    "@dashkite/genie-presets": "file:../genie-presets"
+  },
+  "dependencies": {
+    "@dashkite/parse": "file:../parse",
+    "mime-db": "^1.52.0",
+    "mime-types": "^2.1.35"
+  }
+}
