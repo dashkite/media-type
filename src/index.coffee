@@ -1,3 +1,4 @@
+import * as Type from "@dashkite/joy/type"
 import * as Text from "@dashkite/joy/text"
 import * as P from "@dashkite/parse"
 import Mime from "mime-types"
@@ -119,8 +120,6 @@ mediaType = P.pipe [
   P.merge
 ]
 
-MediaType = parse: P.parser mediaType
-
 acceptDelimiter = P.skip P.all [
   P.optional P.ws
   P.text ","
@@ -170,21 +169,100 @@ matchParameters = (query, target) ->
   ( Object.entries query )
     .every ([ key, value ]) -> target[ key ] == value
 
-Accept = 
+isBinary = (value) ->
+  ( Type.isType ArrayBuffer, value ) ||
+    do ->
+      try
+        # i could have sworn this was available in Node?
+        Type.isType Blob, value
+      catch
+        false
+
+isJSONSerializable = (value) ->
+  try
+    JSON.stringify value
+    true
+  catch
+    false
+
+isStringSerializable = (value) ->
+  try
+    value.toString()
+    true
+  catch
+    false
+
+MediaType =
+
+  parse: P.parser mediaType
+
+  wrap: (value) ->
+    if Type.isString value then MediaType.parse value
+    else if Type.isObject then value
+    else throw new TypeError "expected media type string or description"
+
+  category: (value) ->
+    value = MediaType.wrap value
+    if MediaType.isText value then "text"
+    else if MediaType.isJSON value then "json"
+    else if MediaType.isBinary value then "binary"
+
+  isText: (value) ->
+    value = MediaType.wrap value
+    value.type == "text" || value.mime?.type == "text"
+
+  isJSON: (value) ->
+    value = MediaType.wrap value
+    ( value.subtype == "json" ) || ( value.mime?.subtype == "json" )
+
+  isBinary: (value) ->
+    value = MediaType.wrap value
+    ( value.subtype == "octet-stream" ) ||
+      ( value.mime?.subtype == "octet-stream" ) ||
+      ( /(image|audio|video)/.test value.type ) ||
+      ( /(image|audio|video)/.test value.mime?.type )
+
+  infer: (value) ->
+    if Type.isString value
+      "text"
+    else if isBinary value
+      "binary"
+    else if isJSONSerializable value
+      "json"
+    else if isStringSerializable value
+      "text"
+
+Accept =
 
   parse: P.parser accept
   
+  wrap: (value) -> 
+    if Type.isString value then Accept.parse value
+    else if Type.isArray then value
+    else throw new TypeError "expected accept string or candidate array"
+
+  selectors:
+    text: (candidates) -> (Accept.wrap candidates).find MediaType.isText
+    json: (candidates) -> (Accept.wrap candidates).find MediaType.isJSON
+    binary: (candidates) -> (Accept.wrap candidates).find MediaType.isBinary
+
   matches: (query, value) ->
     ( query.type == "*" || query.type == value.type ) &&
       ( query.subtype == "*" || query.subtype == value.subtype ) &&
         matchParameters query, value
 
-  selector: (text) ->
-    options = Accept.parse text
+  selector: (candidates) ->
+    candidates = Accept.wrap candidates
     (target) ->
       target = MediaType.parse target
-      options.find (option) ->
-        Accept.matches option, target
+      candidates.find (candidate) ->
+        Accept.matches candidate, target
 
+  selectByCategory: (category, candidates) ->
+    Accept.selectors[ category ]? candidates
+
+  selectByContent: (content, candidates) ->
+    if ( category = MediaType.infer content )?
+      Accept.selectByCategory category, candidates
 
 export { MediaType, Accept }

@@ -105,11 +105,10 @@ do ->
           test text, do ->
             for [ target, type ] in associations
               test target, ->
-                console.log select target
                 assert.deepEqual ( select target ), type
 
         [
-          
+
           # https://httpwg.org/specs/rfc7231.html#rfc.section.5.3.2
           scenario "text/*;q=0.3, text/html;q=0.7, text/html;level=1,
             text/html;level=2;q=0.4, */*;q=0.5",
