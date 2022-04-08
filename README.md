@@ -4,7 +4,7 @@ Parse HTTP media types.
 
 ```coffeescript
 import assert from "@dashkite/assert"
-import * as MediaType from "@dashkite/media-type"
+import { MediaType, Accept } from "@dashkite/media-type"
 
 description = MediaType.parse "text/html; charset=utf-8"
 
@@ -25,5 +25,15 @@ assert.deepEqual description,
     suffix: "xml"
     type: "application"
     subtype: "xml"
+
+select = Accept.selector "text/*;q=0.3, text/html;q=0.7, text/html;level=1,
+  text/html;level=2;q=0.4, */*;q=0.5"
+
+assert.deepEqual select "text/html",
+  type: 'text'
+  subtype: 'html'
+  parameters:
+    q: '0.7'
+
 ```
 
