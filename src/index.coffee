@@ -196,6 +196,15 @@ MediaType =
 
   parse: P.parser mediaType
 
+  format: ({type, subtype, parameters, mime}) ->
+    result = "#{type}/#{subtype}"
+    if mime?.suffix?
+      result += "+#{mime.suffix}"
+    if parameters?
+      for key, value of parameters
+        result += "; #{key}=#{value}"
+    result
+
   wrap: (value) ->
     if Type.isString value then MediaType.parse value
     else if Type.isObject then value
