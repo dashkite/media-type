@@ -1,7 +1,6 @@
 import * as Type from "@dashkite/joy/type"
 import * as Text from "@dashkite/joy/text"
 import * as P from "@dashkite/parse"
-import Mime from "mime-types"
 
 lowercase = (c) ->
   if c.rest?
@@ -19,7 +18,14 @@ type = P.pipe [
 ]
 
 mimeLookup = (suffix) ->
-  ( Mime.lookup suffix ) ? "application/octet-stream"
+  switch suffix
+    when "js" then "text/javascript"
+    when "json" then "application/json"
+    when "txt" then "text/plain"
+    when "html" then "text/html"
+    when "css" then "text/css"
+    when "xml" then "application/xml"
+    else "application/octet-stream"
 
 expandSubtype = (subtype) ->
   [ base, suffix ] = subtype.split "+"
@@ -194,6 +200,10 @@ isStringSerializable = (value) ->
 
 MediaType =
 
+  fromPath: (path) ->
+    if ( suffix = ( path.match /.([0-9a-z]+)$/i )?[1] )?
+      MediaType.parse mimeLookup suffix
+
   parse: P.parser mediaType
 
   format: ({type, subtype, parameters, mime}) ->
@@ -247,7 +257,7 @@ Accept =
   
   wrap: (value) -> 
     if Type.isString value then Accept.parse value
-    else if Type.isArray then value
+    else if Type.isArray then value.map MediaType.wrap
     else throw new TypeError "expected accept string or candidate array"
 
   selectors:

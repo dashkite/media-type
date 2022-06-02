@@ -1,4 +1,6 @@
-import * as genie from "@dashkite/genie"
-import presets from "@dashkite/genie-presets"
+import * as t from "@dashkite/genie"
+import preset from "@dashkite/genie-presets"
+import sky from "@dashkite/sky-presets"
 
-presets genie
+preset t
+sky t
