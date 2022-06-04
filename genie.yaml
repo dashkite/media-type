@@ -13,9 +13,4 @@ presets:
           glob:
             - "{src,test}/**/*.coffee"
 
-sky:
-  collections:
-    - name: "modules.dashkite.io"
-      publish:
-        root: build/browser/src
-        target: media-type/build/browser/src
+sky: {}
