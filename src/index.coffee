@@ -124,6 +124,8 @@ mediaType = P.pipe [
     P.optional parameters
   ]
   P.merge
+  P.map ( description ) ->
+    { type: "*", subtype: "*", description... }
 ]
 
 acceptDelimiter = P.skip P.all [
@@ -242,12 +244,12 @@ MediaType =
       ( /(image|audio|video)/.test value.mime?.type )
 
   infer: (value) ->
-    if Type.isString value
-      "text"
+    if isJSONSerializable value
+      "json"
     else if isBinary value
       "binary"
-    else if isJSONSerializable value
-      "json"
+    else if Type.isString value
+      "text"
     else if isStringSerializable value
       "text"
 
