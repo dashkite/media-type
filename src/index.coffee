@@ -272,12 +272,13 @@ Accept =
       ( query.subtype == "*" || query.subtype == value.subtype ) &&
         matchParameters query, value
 
-  selector: (candidates) ->
-    candidates = Accept.wrap candidates
-    (target) ->
-      target = MediaType.parse target
-      candidates.find (candidate) ->
-        Accept.matches candidate, target
+  select: ( candidates, target ) ->
+    target = MediaType.parse target
+    ( Accept.wrap candidates ).find (candidate) ->
+      Accept.matches candidate, target
+
+  selectAll: ( candidates, targets ) ->
+    targets.filter ( target ) -> ( Accept.select candidates, target )?
 
   selectByCategory: (category, candidates) ->
     Accept.selectors[ category ]? candidates
@@ -285,5 +286,8 @@ Accept =
   selectByContent: (content, candidates) ->
     if ( category = MediaType.infer content )?
       Accept.selectByCategory category, candidates
+
+  selector: (candidates) ->
+    ( target ) -> Accept.select candidates, target
 
 export { MediaType, Accept }
