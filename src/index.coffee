@@ -244,12 +244,12 @@ MediaType =
       ( /(image|audio|video)/.test value.mime?.type )
 
   infer: (value) ->
-    if isJSONSerializable value
-      "json"
+    if Type.isString value
+      "text"
     else if isBinary value
       "binary"
-    else if Type.isString value
-      "text"
+    else if isJSONSerializable value
+      "json"
     else if isStringSerializable value
       "text"
 
