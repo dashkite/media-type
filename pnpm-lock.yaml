@@ -9,7 +9,6 @@ specifiers:
   '@dashkite/genie-presets': ^0.6.2
   '@dashkite/joy': ^0.3.16
   '@dashkite/parse': link:../parse
-  '@dashkite/sky-presets': link:../sky-presets
 
 dependencies:
   '@dashkite/joy': 0.3.16
@@ -22,7 +21,6 @@ devDependencies:
   '@dashkite/genie': 0.5.11
   '@dashkite/genie-modules': link:../genie-modules
   '@dashkite/genie-presets': 0.6.2
-  '@dashkite/sky-presets': link:../sky-presets
 
 packages:
 
