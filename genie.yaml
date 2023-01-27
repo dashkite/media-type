@@ -12,3 +12,5 @@ presets:
         - preset: node
           glob:
             - "{src,test}/**/*.coffee"
+
+modules: {}
