@@ -9,55 +9,70 @@ do ->
   print await test "@dashkite/media-type", [
 
 
-    test "MediaType", do ({scenario, scenarios} = {}) ->
-  
-      scenario = (text, expected) ->
-        test text, ->
-          assert.deepEqual ( MediaType.parse text ), expected
+    test "MediaType", [
 
-      scenarios = (description, array, expected) ->
-        test description,
-          for text in array
-            scenario text, expected
-
-      [
-
-        scenario "application/json",
-          type: "application"
-          subtype: "json"
+      test "fromPath", [
         
-        # https://httpwg.org/specs/rfc7231.html#rfc.section.3.1.1.1
-        scenarios "case, quoting, and whitespace variations", [
-            "text/html;charset=utf-8"  
-            "text/html; charset=utf-8"
-            "text/html;charset=UTF-8"
-            'Text/HTML;Charset="utf-8"'
-            'text/html; charset="utf-8"'
-          ],
-          type: "text"
-          subtype: "html"
-          parameters:
-            charset: "utf-8"
+        test "./html.js", ->
+          assert.deepEqual  { type: "text", subtype: "javascript" },
+            MediaType.fromPath "./html.js"
+        
+        test "./css.js", ->
+          assert.deepEqual  { type: "text", subtype: "javascript" },
+            MediaType.fromPath "./css.js"
 
-        scenario "image/svg+xml",
-          type: "image"
-          subtype: "svg+xml"
-          mime:
-            base: "svg"
-            suffix: "xml"
-            type: "application"
-            subtype: "xml"
-
-        scenario "application/atom+xml; q=0.5",
-          type: "application"
-          subtype: "atom+xml"
-          parameters: q: "0.5"
-          mime:
-            base: "atom"
-            suffix: "xml"
-            type: "application"
-            subtype: "xml"
       ]
+      
+      test "Parse", do ({scenario, scenarios} = {}) ->
+  
+        scenario = (text, expected) ->
+          test text, ->
+            assert.deepEqual ( MediaType.parse text ), expected
+
+        scenarios = (description, array, expected) ->
+          test description,
+            for text in array
+              scenario text, expected
+
+        [
+
+          scenario "application/json",
+            type: "application"
+            subtype: "json"
+          
+          # https://httpwg.org/specs/rfc7231.html#rfc.section.3.1.1.1
+          scenarios "case, quoting, and whitespace variations", [
+              "text/html;charset=utf-8"  
+              "text/html; charset=utf-8"
+              "text/html;charset=UTF-8"
+              'Text/HTML;Charset="utf-8"'
+              'text/html; charset="utf-8"'
+            ],
+            type: "text"
+            subtype: "html"
+            parameters:
+              charset: "utf-8"
+
+          scenario "image/svg+xml",
+            type: "image"
+            subtype: "svg+xml"
+            mime:
+              base: "svg"
+              suffix: "xml"
+              type: "application"
+              subtype: "xml"
+
+          scenario "application/atom+xml; q=0.5",
+            type: "application"
+            subtype: "atom+xml"
+            parameters: q: "0.5"
+            mime:
+              base: "atom"
+              suffix: "xml"
+              type: "application"
+              subtype: "xml"
+        ]
+    ]
 
     test "Accepts", [
       
