@@ -24,6 +24,7 @@ mimeLookup = (suffix) ->
     when "txt" then "text/plain"
     when "html" then "text/html"
     when "css" then "text/css"
+    when "svg" then "image/svg+xml"
     when "xml" then "application/xml"
     else "application/octet-stream"
 
