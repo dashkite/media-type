@@ -26,6 +26,8 @@ mimeLookup = (suffix) ->
     when "css" then "text/css"
     when "svg" then "image/svg+xml"
     when "xml" then "application/xml"
+    when "jpg", "jpeg" then "image/jpeg"
+    when "png" then "image/png"
     else "application/octet-stream"
 
 expandSubtype = (subtype) ->
