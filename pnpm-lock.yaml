@@ -9,8 +9,8 @@ dependencies:
     specifier: ^0.3.16
     version: 0.3.16
   '@dashkite/parse':
-    specifier: link:../parse
-    version: link:../parse
+    specifier: ^0.4.3
+    version: 0.4.3
 
 devDependencies:
   '@dashkite/amen':
@@ -52,6 +52,12 @@ packages:
 
   /@dashkite/joy@0.3.16:
     resolution: {integrity: sha512-dsU0us4j1Pb+zceoBvLbnZ2PbmULkJUtM2vtWLxKmoc1DE4w9SVTiPTe6JWvF0A0vk90ldv+Lc9qEA5x3O+DtQ==}
+
+  /@dashkite/parse@0.4.3:
+    resolution: {integrity: sha512-bE0kBjaGYjUnCzWJelQnx8vsfJ9YP07aRTVFZoY7TZWvMmnihoCSugL4IVWAOA2O0EAZXjT8FcjA4bNJ/BQwwg==}
+    dependencies:
+      '@dashkite/joy': 0.3.16
+    dev: false
 
   /ansi-styles@4.3.0:
     resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
