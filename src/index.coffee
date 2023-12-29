@@ -3,8 +3,8 @@ import * as Text from "@dashkite/joy/text"
 import * as P from "@dashkite/parse"
 
 lowercase = (c) ->
-  if c.rest?
-    c.rest = c.rest.toLowerCase()
+  if R.rest?
+    R.rest = R.rest.toLowerCase()
   c
 
 # https://httpwg.org/specs/rfc7230.html#rule.token.separators
