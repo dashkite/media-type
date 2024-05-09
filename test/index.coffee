@@ -22,6 +22,13 @@ do ->
             MediaType.fromPath "./css.js"
 
       ]
+
+      test "format", [
+
+        test "./hello.svg", ->
+          assert.equal "image/svg+xml",
+            MediaType.format MediaType.fromPath "./hello.svg"
+      ]
       
       test "Parse", do ({scenario, scenarios} = {}) ->
   

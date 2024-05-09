@@ -203,6 +203,8 @@ isStringSerializable = (value) ->
   catch
     false
 
+hasSuffix = ( text ) -> /\+\w+$/.test text
+
 MediaType =
 
   fromPath: (path) ->
@@ -213,7 +215,7 @@ MediaType =
 
   format: ({type, subtype, parameters, mime}) ->
     result = "#{type}/#{subtype}"
-    if mime?.suffix?
+    if mime?.suffix? && !( hasSuffix subtype )
       result += "+#{mime.suffix}"
     if parameters?
       for key, value of parameters
