@@ -1,5 +1,6 @@
 import * as Type from "@dashkite/joy/type"
 import * as Text from "@dashkite/joy/text"
+
 import * as P from "@dashkite/parse"
 
 lowercase = (c) ->
@@ -258,9 +259,38 @@ MediaType =
     else if isStringSerializable value
       "text"
 
+  serialize: ( args... ) ->
+
+    switch args.length
+      when 1 then [ value ] = args
+      else [ type, value ] = args
+
+
+    category = if type?
+      MediaType.category type
+    else
+      MediaType.infer value           
+
+    switch category
+      when "text" then value.toString()
+      when "binary" then ( new TextDecoder ).decode value
+      when "json" then JSON.stringify value
+
+  fromValue: ( value ) ->
+    switch MediaType.infer value
+      when "text" then type: "text", subtype: "plain"
+      when "binary" then type: "application", subtype: "octet-stream"
+      when "json" then type: "application", subtype: "json"
+    
+
 Accept =
 
   parse: P.parser accept
+
+  format: ( types ) ->
+    ( for type in types
+        MediaType.format type )
+      .join ", "
   
   wrap: (value) -> 
     if Type.isString value then Accept.parse value
