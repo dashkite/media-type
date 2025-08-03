@@ -1,6 +1,6 @@
 {
   "name": "@dashkite/media-type",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "Parse HTTP Media Types in JavaScript",
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Dan Yoder",
