@@ -15,11 +15,11 @@ do ->
         
         test "./html.js", ->
           assert.deepEqual  { type: "text", subtype: "javascript" },
-            MediaType.fromPath "./html.js"
+            ( MediaType.fromPath "./html.js" ).data
         
         test "./css.js", ->
           assert.deepEqual  { type: "text", subtype: "javascript" },
-            MediaType.fromPath "./css.js"
+            ( MediaType.fromPath "./css.js" ).data
 
       ]
 
@@ -27,14 +27,14 @@ do ->
 
         test "./hello.svg", ->
           assert.equal "image/svg+xml",
-            MediaType.format MediaType.fromPath "./hello.svg"
+            ( MediaType.fromPath "./hello.svg" ).format()
       ]
       
       test "Parse", do ({scenario, scenarios} = {}) ->
   
         scenario = (text, expected) ->
           test text, ->
-            assert.deepEqual ( MediaType.parse text ), expected
+            assert.deepEqual (( MediaType.parse text ).data ), expected
 
         scenarios = (description, array, expected) ->
           test description,
@@ -87,7 +87,7 @@ do ->
   
         scenario = (text, expected) ->
           test text, ->
-            assert.deepEqual ( Accept.parse text ), expected
+            assert.deepEqual ( Accept.parse text ).data, expected
 
         [
           scenario "text/html,
@@ -120,14 +120,17 @@ do ->
             ]
         ]
 
-      test "Match", do ({scenario} = {}) ->
+      test "Supported", do ({scenario} = {}) ->
 
-        scenario = (text, associations) ->
-          select = Accept.selector text
+        scenario = ( text, associations ) ->
+          select = ( target ) ->
+            Accept
+              .parse text
+              .supported MediaType.parse target
           test text, do ->
             for [ target, type ] in associations
               test target, ->
-                assert.deepEqual ( select target ), type
+                assert ( select target )
 
         [
 
