@@ -13,6 +13,12 @@ class MediaType extends metaclass()
   @parse: ( specifier ) -> 
     MediaType.make Parsers.mediaType specifier
   
+  @format: ( value ) ->
+    if value instanceof MediaType
+      value.format()
+    else
+      ( MediaType.make value ).format()
+
   @fromPath: ( path ) ->
     if ( extension = ( path.match /.([0-9a-z]+)$/i )?[1] )?
       MediaType.parse MIME.getType extension

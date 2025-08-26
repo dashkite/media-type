@@ -1,6 +1,7 @@
 import { metaclass } from "@dashkite/joy/metaclass"
 import Parsers from "./parsers"
 import { sort } from "./parsers/accept"
+import MediaType from "./media-type"
 
 normalizeParameters = (p) -> { p..., q } = ( p ? {} ) ; p
 
@@ -19,6 +20,12 @@ class Accept extends metaclass()
   @parse: ( specifier ) -> 
     Object.assign ( new @ ),
       candidates: Parsers.accept specifier
+
+  @format: ( value ) ->
+    if value instanceof Accept
+      value.format()
+    else
+      ( Accept.make value ).format()
 
   @matches: ( candidate, target ) ->
     ( candidate.type == "*" || candidate.type == target.type ) &&
