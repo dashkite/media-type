@@ -24,6 +24,7 @@ class MediaType extends metaclass()
       MediaType.parse MIME.getType extension
 
   @getters
+
     data: -> { @... }
 
   toJSON: -> @data
