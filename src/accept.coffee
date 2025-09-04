@@ -1,7 +1,16 @@
 import { metaclass } from "@dashkite/joy/metaclass"
+import * as Type from "@dashkite/joy/type"
 import Parsers from "./parsers"
 import { sort } from "./parsers/accept"
 import MediaType from "./media-type"
+
+normalizeCandidate = ( candidate ) ->
+  if Type.isString candidate
+    ( MediaType.parse candidate ).data
+  else candidate
+
+normalizeCandidates = ( candidates ) ->
+  candidates.map normalizeCandidate
 
 normalizeParameters = (p) -> { p..., q } = ( p ? {} ) ; p
 
@@ -14,8 +23,13 @@ matchParameters = ( candidate, target ) ->
 class Accept extends metaclass()
 
   @make: ( candidates ) ->
-    Object.assign ( new @ ), 
-      candidates: sort candidates
+    if Type.isString candidates
+      @parse candidates
+    else if Type.isArray candidates
+      Object.assign ( new @ ), 
+        candidates: sort normalizeCandidates candidates
+    else
+      throw new TypeError "accept: invalid argument"
 
   @parse: ( specifier ) -> 
     Object.assign ( new @ ),

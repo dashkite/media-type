@@ -8,7 +8,10 @@ hasSuffix = ( text ) -> /\+\w+$/.test text
 class MediaType extends metaclass()
 
   @make: ( specifier ) ->
-    Object.assign ( new @ ), specifier
+    if Type.isString specifier
+      @parse specifier
+    else
+      Object.assign ( new @ ), specifier
   
   @parse: ( specifier ) -> 
     MediaType.make Parsers.mediaType specifier
